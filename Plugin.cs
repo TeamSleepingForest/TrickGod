@@ -81,7 +81,15 @@ namespace TrickGod
                 //if player combo'ing?
                 if ((player.IsComboing() || player.IsGrinding()) && enableTrickGod == true)
                 {
-                    Logger.LogInfo("BOOST TRICK SCORE!");
+                    Logger.LogInfo("BOOST TRICK SCORE - Start!");
+
+                    //give boost stack
+                    player.AddBoostCharge(500);
+
+                    //give multiplier stack
+                    player.AddScoreMultiplier();
+
+                    Logger.LogInfo("BOOST TRICK SCORE - End!");
                 }
 
                 //toggle trick god
@@ -102,5 +110,6 @@ namespace TrickGod
 
 
         }
+        
     }
 }
