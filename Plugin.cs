@@ -18,9 +18,7 @@ using BRCML;
 // - Multipliers can be modified to increase in different increments [check config]
 
 //TODO:
-// Find method that is called when a trick is completed and add a listener in this plugin
-// Find method that is called when a multiplier is increased and add a listener in this plugin
-// Find method that adds time decay to slides and find a way to disable it
+// Add UI Element
 
 namespace TrickGod
 {
@@ -40,6 +38,7 @@ namespace TrickGod
         private Core core;
         private WorldHandler world;
         private bool coreHasBeenSetup;
+        private bool delegateHasBeenSetup = false;
 
         private void Awake()
         {
@@ -71,6 +70,16 @@ namespace TrickGod
                 {
                     world = WorldHandler.instance;
                     coreHasBeenSetup = world != null;
+
+                    if (!delegateHasBeenSetup)
+                    {
+                        StageManager.OnStageInitialized += () =>
+                        {
+                            Logger.LogInfo("Swapped to new stage!");
+                            coreHasBeenSetup = false;
+                        };
+                        delegateHasBeenSetup = true;
+                    }
                 }
             }
 
@@ -81,15 +90,11 @@ namespace TrickGod
                 //if player combo'ing?
                 if ((player.IsComboing() || player.IsGrinding()) && enableTrickGod == true)
                 {
-                    Logger.LogInfo("BOOST TRICK SCORE - Start!");
-
                     //give boost stack
-                    player.AddBoostCharge(500);
+                    player.AddBoostCharge(100);
 
                     //give multiplier stack
                     player.AddScoreMultiplier();
-
-                    Logger.LogInfo("BOOST TRICK SCORE - End!");
                 }
 
                 //toggle trick god
