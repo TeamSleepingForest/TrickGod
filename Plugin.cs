@@ -24,7 +24,7 @@ using BRCML;
 
 namespace TrickGod
 {
-    [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
+    [BepInPlugin("team.sleepingforest.plugins.brc.trickgod", "Trick God", "0.0.1")]
     [BepInDependency(BRCML.PluginInfos.PLUGIN_ID, BepInDependency.DependencyFlags.HardDependency)]
     [BepInProcess("Bomb Rush Cyberfunk.exe")]
     public class Plugin : BaseUnityPlugin
@@ -37,6 +37,11 @@ namespace TrickGod
         {
             // Plugin startup logic
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
+
+            var harmony = new Harmony ("io.teamsleepingforest.trickgod");
+            harmony.PatchAll();
+
+            Logger.LogInfo("BABABOOEY!");
         }
     }
 }
