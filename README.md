@@ -25,3 +25,5 @@ Mod for Bombrush Cyberfunk that makes getting high scores extremely easy
 - `\` : Toggle Trick God Mode
 - `'` : Toggle UI
 
+### Credits
+Credits to [judah-caruso](https://github.com/judah-caruso) and [Glomzubuk](https://gitlab.com/glomzubuk)
