@@ -1,6 +1,6 @@
 # TrickGod
 Mod for Bombrush Cyberfunk that makes getting high scores extremely easy
-![Screenshot of player using trick god to score over 99 million points with just 21 tricks](/assets/Screenshot_TrickGod.png)
+![Screenshot of player using trick god to score over 99 million points with just 21 tricks](/Screenshot_TrickGod.png)
 
 
 ## Features
