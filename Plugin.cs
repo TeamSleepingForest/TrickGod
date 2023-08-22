@@ -24,24 +24,25 @@ using BRCML;
 
 namespace TrickGod
 {
-    [BepInPlugin("team.sleepingforest.plugins.brc.trickgod", "Trick God", "0.0.1")]
+    [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
     [BepInDependency(BRCML.PluginInfos.PLUGIN_ID, BepInDependency.DependencyFlags.HardDependency)]
     [BepInProcess("Bomb Rush Cyberfunk.exe")]
     public class Plugin : BaseUnityPlugin
     {
-        private static bool trickGod = true;
-        private static float multiplierIncrement = 5; // how much the mutlipler increases when a new trick is done (corner lean, vert, etc.)
-        private static float trickIncrement = 1000; //how many points are awarded per trick
+        // private static bool trickGod = true;
+        // private static float multiplierIncrement = 5; // how much the mutlipler increases when a new trick is done (corner lean, vert, etc.)
+        // private static float trickIncrement = 1000; //how many points are awarded per trick
+        internal static Plugin Instance { get; private set; } = null;
+        internal static ManualLogSource Log { get; private set; } = null;
 
         private void Awake()
         {
             // Plugin startup logic
-            Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
-
+            Instance = this;
+            Log = Logger;
+            Logger.LogInfo("Trick God is loaded!!!");
             var harmony = new Harmony ("io.teamsleepingforest.trickgod");
             harmony.PatchAll();
-
-            Logger.LogInfo("BABABOOEY!");
         }
     }
 }
