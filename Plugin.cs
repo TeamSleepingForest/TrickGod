@@ -25,24 +25,82 @@ using BRCML;
 namespace TrickGod
 {
     [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
-    [BepInDependency(BRCML.PluginInfos.PLUGIN_ID, BepInDependency.DependencyFlags.HardDependency)]
     [BepInProcess("Bomb Rush Cyberfunk.exe")]
     public class Plugin : BaseUnityPlugin
     {
-        // private static bool trickGod = true;
-        // private static float multiplierIncrement = 5; // how much the mutlipler increases when a new trick is done (corner lean, vert, etc.)
-        // private static float trickIncrement = 1000; //how many points are awarded per trick
+
+        internal volatile bool enableTrickGod;
+        internal static ConfigEntry<KeyCode> toggleKey;
+        internal static ConfigEntry<double> multiplierIncrement;// how much the mutlipler increases when a new trick is done (corner lean, vert, etc.)
+        internal static ConfigEntry<double> trickIncrement;//how many points are awarded per trick
+
         internal static Plugin Instance { get; private set; } = null;
         internal static ManualLogSource Log { get; private set; } = null;
+
+        private Core core;
+        private WorldHandler world;
+        private bool coreHasBeenSetup;
 
         private void Awake()
         {
             // Plugin startup logic
             Instance = this;
             Log = Logger;
-            Logger.LogInfo("Trick God is loaded!!!");
-            var harmony = new Harmony ("io.teamsleepingforest.trickgod");
+            Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
+            var harmony = new Harmony (PluginInfo.PLUGIN_GUID);
             harmony.PatchAll();
+
+            enableTrickGod = false;
+            multiplierIncrement = this.Config.Bind<double>("Sets", "MultiplierIncrement", 5.0);
+            trickIncrement = this.Config.Bind<double>("Sets", "TrickIncrement", 1000.0);   
+            toggleKey = this.Config.Bind<KeyCode>("KeyBinds", "ReloadLibrary", KeyCode.F1);
+        }
+
+        void Start()
+        {
+            Logger.LogInfo("init trick god");
+        }
+
+        void Update()
+        {
+            //wait for core and world setup
+            if (!coreHasBeenSetup)
+            {
+                core = Core.Instance;
+                if (core != null)
+                {
+                    world = WorldHandler.instance;
+                    coreHasBeenSetup = world != null;
+                }
+            }
+
+            if (coreHasBeenSetup)
+            {
+                var player = world.GetCurrentPlayer();
+
+                //if player combo'ing?
+                if ((player.IsComboing() || player.IsGrinding()) && enableTrickGod == true)
+                {
+                    Logger.LogInfo("BOOST TRICK SCORE!");
+                }
+
+                //toggle trick god
+                if (Input.GetKeyDown(toggleKey.Value))
+                {
+                    if (enableTrickGod == true)
+                    {
+                        enableTrickGod = false;
+                        Logger.LogInfo("TRICK GOD: OFF");
+                    }
+                    else
+                    {
+                        enableTrickGod = true;
+                        Logger.LogInfo("TRICK GOD: ON");
+                    }
+                }
+            }
+
+
         }
     }
 }
